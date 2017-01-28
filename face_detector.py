@@ -1,19 +1,28 @@
 # -*- coding: utf-8 -*-
 import sys
 import dlib
+import imutils
 from skimage import io
+import argparse
+from imutils import paths
+from imutils.object_detection import non_max_suppression
+import cv2
+# import a set of images
+ap = argparse.ArgumentParser()
+ap.add_argument("-i", "--images", required=True, help="path to the images directory")
+args = vars(ap.parse_args())
 
+# initialize dlib face detector
 #使用dlib自带的frontal_face_detector作为我们的特征提取器
 detector = dlib.get_frontal_face_detector()
 #使用dlib提供的图片窗口
 win = dlib.image_window()
 
-#sys.argv[]是用来获取命令行参数的，sys.argv[0]表示代码本身文件路径，所以参数从1开始向后依次获取图片路径
-for f in sys.argv[1:]:
-    #输出目前处理的图片地址
-    print("Processing file: {}".format(f))
-    #使用skimage的io读取图片
-    img = io.imread(f)
+# loop over the image paths
+for imagePath in paths.list_images(args["images"]):
+    img = cv2.imread(imagePath)
+    img = imutils.resize(img, width=min(400, img.shape[1]))
+    orig = img.copy()
     #使用detector进行人脸检测 dets为返回的结果
     dets = detector(img, 1)
     #dets的元素个数即为脸的个数
