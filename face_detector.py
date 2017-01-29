@@ -15,19 +15,19 @@ args = vars(ap.parse_args())
 # initialize dlib face detector
 #使用dlib自带的frontal_face_detector作为我们的特征提取器
 detector = dlib.get_frontal_face_detector()
-#使用dlib提供的图片窗口
-win = dlib.image_window()
 
 # loop over the image paths
 for imagePath in paths.list_images(args["images"]):
-    img = cv2.imread(imagePath)
+    #使用dlib提供的图片窗口
+    win = dlib.image_window()
+    #img = cv2.imread(imagePath) # note that cv2.imread() may have color issue (order of R, G,B)
+    img = io.imread(imagePath) # functions from skimage.io
     img = imutils.resize(img, width=min(400, img.shape[1]))
-    orig = img.copy()
+    #orig = img.copy()
     #使用detector进行人脸检测 dets为返回的结果
     dets = detector(img, 1)
     #dets的元素个数即为脸的个数
     print("Number of faces detected: {}".format(len(dets)))
-    
     
     #使用enumerate函数遍历序列中的元素以及它们的下标
     #下标i即为人脸序号
@@ -39,9 +39,9 @@ for imagePath in paths.list_images(args["images"]):
             .format( i, d.left(), d.top(), d.right(), d.bottom()))
 
     #也可以获取比较全面的信息，如获取人脸与detector的匹配程度
-    dets, scores, idx = detector.run(img, 1)
-    for i, d in enumerate(dets):
-        print("Detection {}, dets{},score: {}, face_type:{}".format( i, d, scores[i], idx[i]))    
+    #dets, scores, idx = detector.run(img, 1)
+    #for i, d in enumerate(dets):
+    #    print("Detection {}, dets{},score: {}, face_type:{}".format( i, d, scores[i], idx[i]))    
 
     #绘制图片(dlib的ui库可以直接绘制dets)
     win.set_image(img)
