@@ -28,6 +28,7 @@ for imagePath in paths.list_images(args["images"]):
     #dets的元素个数即为脸的个数
     print("Number of faces detected: {}".format(len(dets)))
     
+    
     #使用enumerate函数遍历序列中的元素以及它们的下标
     #下标i即为人脸序号
     #left：人脸左边距离图片左边界的距离； right：人脸右边距离图片左边界的距离 
