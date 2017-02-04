@@ -1,10 +1,12 @@
 import cv2
 import dlib
+import pdb
 
 # set up some required objects
-video_capture = cv2.VideoCapture()
+video_capture = cv2.VideoCapture(0) # set (0)
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+# download from https://github.com/AKSHAYUBHAT/TensorFace/blob/master/openface/models/dlib/shape_predictor_68_face_landmarks.dat
 
 while True:
 	ret, frame = video_capture.read()
@@ -13,7 +15,7 @@ while True:
 	clahe_image = clahe.apply(gray)
 
 	detections = detector(clahe_image, 1)
-	for k,d in enumerte(detections):
+	for k,d in enumerate(detections):
 		shape = predictor(clahe_image, d)
 		for i in range(1,68):
 			cv2.circle(frame, (shape.part(i).x, shape.part(i).y), 1, (0,0,255), thickness=2)
